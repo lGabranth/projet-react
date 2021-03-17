@@ -1,33 +1,35 @@
 import React, {Component} from "react";
-import PostService from "../../services/post.service";
+import UserService from "../../services/user.service";
 
-export default class PostDetails extends Component {
+export default class UserDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      post: null
+      user: null
     }
   }
 
   async componentDidMount() {
     let {id} = this.props.match.params;
-    let response = await PostService.details(id);
-    this.setState({post: response.data});
+    let response = await UserService.details(id);
+    this.setState({user: response.data});
   }
 
   async handleDelete() {
-    await PostService.delete(this.state.post.id);
+    await UserService.delete(this.state.user.id);
     this.props.history.push('/articles');
   }
 
   render() {
-    let {post} = this.state;
+    let {user} = this.state;
     return <div className="container">
-      <h1>Article - {post && post.title}</h1>
-      <h2>Contenu</h2>
-      <p>{post && post.body}</p>
-
-      <button className="btn btn-sm btn-danger" onClick={() => this.handleDelete()}>Supprimer</button>
+      <div className="row mt-5">
+        <div className="col text-center">
+          <h1>Utilisateur - {user && user.name}</h1>
+          <p>Email : {user && user.email}</p>
+          <button className="btn btn-sm btn-danger" onClick={() => this.handleDelete()}>Supprimer</button>
+        </div>
+      </div>
     </div>
   }
 }

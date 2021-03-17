@@ -1,20 +1,20 @@
 import React, {Component} from "react";
-import PostService from "../../services/post.service";
+import UserService from "../../services/user.service";
 
-export default class PostUpdate extends Component {
+export default class UserUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "",
-      body: "",
-      post: null
+      name: "",
+      email: "",
+      user: null
     }
   }
 
   async componentDidMount() {
     let {id} = this.props.match.params;
-    let response = await PostService.details(id);
-    this.setState({post: response.data, body: response.data.body, title: response.data.title});
+    let response = await UserService.details(id);
+    this.setState({user: response.data, name: response.data.name, email: response.data.email});
   }
 
   handleChange(e) {
@@ -24,31 +24,27 @@ export default class PostUpdate extends Component {
   async handleSubmit(e) {
     e.preventDefault();
 
-    let {title, body, post} = this.state;
-    let obj_tmp = post;
-    obj_tmp.title = title;
-    obj_tmp.body = body;
-
-    await PostService.update(obj_tmp);
-    this.props.history.push('/articles');
+    let {name, email} = this.state;
+    await UserService.update(this.state.user.id, {name, email});
+    this.props.history.push('/users');
   }
 
   render() {
-    let {title, body, post} = this.state;
+    let {email, name, user} = this.state;
     return <div className="container text-center">
-      <h1>Modifier votre article - { post && post.title }</h1>
+      <h1>Modifier l'utilisateur : { user && user.name }</h1>
 
       <div className="row">
         <div className="col">
           <form className="mt-4" onSubmit={e => this.handleSubmit(e)}>
             <div className="form-group">
-              <label>Titre</label>
-              <input value={title} type="text" name="title" className="form-control" required onChange={e => this.handleChange(e)}/>
+              <label>Nom</label>
+              <input value={name} type="text" name="name" className="form-control" required onChange={e => this.handleChange(e)}/>
             </div>
 
             <div className="form-group mt-3">
-              <label>Contenu</label>
-              <textarea value={body} name="body" rows="5" className="form-control" required onChange={e => this.handleChange(e)}/>
+              <label>Email</label>
+              <input value={email} type="text" name="email" className="form-control" required onChange={e => this.handleChange(e)}/>
             </div>
 
             <button className="btn btn-primary btn-sm mt-4" type="submit">Modifier</button>

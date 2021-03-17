@@ -1,33 +1,33 @@
 import React, {Component} from "react";
-import PostService from "../../services/post.service";
-import Post from "../../components/Post";
 import {Link} from "react-router-dom";
+import UserService from "../../services/user.service";
+import User from "../../components/User";
 
-export default class PostsList extends Component {
+export default class UsersList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: []
+      users: []
     }
   }
 
   async componentDidMount() {
-    let posts = await PostService.list();
-    this.setState({posts});
+    let users = await UserService.list();
+    this.setState({users});
   }
 
   render() {
-    let {posts} = this.state;
+    let {users} = this.state;
 
     return <div className="container">
-      <h1>Liste des articles</h1>
+      <h1>Liste des utilisateurs</h1>
 
-      <Link className="btn btn-sm btn-primary" to="/articles/ajouter">Ajouter un article</Link>
+      <Link className="btn btn-sm btn-primary" to="/users/ajouter">Ajouter un utilisateur</Link>
 
       <div className="row">
-        {posts.map((post, index)=> {
+        {users.map((user, index)=> {
           return <div className="col-md-4" key={index}>
-            <Post post={post} />
+            <User user={user} />
           </div>
         })}
       </div>

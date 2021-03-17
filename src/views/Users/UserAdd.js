@@ -1,12 +1,12 @@
 import React, {Component} from "react";
-import PostService from "../../services/post.service";
+import UserService from "../../services/user.service";
 
-export default class PostAdd extends Component {
+export default class UserAdd extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: null,
-      body: null
+      name: null,
+      email: null
     }
   }
 
@@ -17,26 +17,26 @@ export default class PostAdd extends Component {
   async handleSubmit(e) {
     e.preventDefault();
 
-    let {title, body} = this.state;
-    await PostService.create({title, body, userId: 1});
-    this.props.history.push('/articles');
+    let {name, email} = this.state;
+    await UserService.create({name, email});
+    this.props.history.push('/users');
   }
 
   render() {
     return <div className="container text-center">
-      <h1>Veuillez ajouter votre article</h1>
-
       <div className="row">
         <div className="col">
+          <h1>Veuillez ajouter un utilisateur</h1>
+
           <form className="mt-4" onSubmit={e => this.handleSubmit(e)}>
             <div className="form-group">
-              <label>Titre</label>
-              <input type="text" name="title" className="form-control" required onChange={e => this.handleChange(e)}/>
+              <label>Nom et prénom</label>
+              <input type="text" name="name" className="form-control" required onChange={e => this.handleChange(e)}/>
             </div>
 
             <div className="form-group mt-3">
-              <label>Contenu</label>
-              <textarea name="body" rows="5" className="form-control" required onChange={e => this.handleChange(e)}/>
+              <label>Adresse email</label>
+              <textarea name="email" rows="5" className="form-control" required onChange={e => this.handleChange(e)}/>
             </div>
 
             <button className="btn btn-primary btn-sm mt-4" type="submit">Ajouter</button>
