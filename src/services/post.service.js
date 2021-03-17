@@ -1,12 +1,18 @@
 import axios from "axios";
+import UserService from "./user.service";
 
 const baseUrl = "https://jsonplaceholder.typicode.com"
 
 export default class PostService {
   static async list(limit = null) {
     let call = await axios.get(`${baseUrl}/posts`);
+    let posts = limit !== null ? call.data.slice(0, limit) : call.data;
+    let users = await UserService.list();
 
-    return limit !== null ? call.data.slice(0, limit) : call.data;
+    return posts.map(post => {
+      post.user = users.find(user => user.id === post.userId);
+      return post;
+    });
   }
 
   static async create(data) {

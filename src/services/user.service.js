@@ -5,8 +5,16 @@ const baseUrl = "https://jsonplaceholder.typicode.com"
 export default class UserService {
   static async list(limit = null) {
     let call = await axios.get(`${baseUrl}/users`);
+    let users = limit !== null ? call.data.slice(0, limit) : call.data;
+    let posts = await axios.get(`${baseUrl}/posts`);
 
-    return limit !== null ? call.data.slice(0, limit) : call.data;
+    for(let user of users) {
+      let nbPost = 0;
+      for(let post of posts.data) if(user.id === post.userId) nbPost++;
+      user.nbPosts = nbPost;
+    }
+
+    return users;
   }
 
   static async create(data) {
